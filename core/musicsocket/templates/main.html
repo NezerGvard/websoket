@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Иди нахуй</h1>
+
+    <script>
+        function convertBlobToWav(blobData) {
+        // Создаем новый Blob из blob-данных
+        const blob = new Blob([blobData], { type: 'audio/wav' });
+
+        // Создаем объект Audio для воспроизведения (необязательно)
+        const audio = new Audio();
+        audio.src = URL.createObjectURL(blob);
+        audio.controls = true;
+        document.body.appendChild(audio);
+
+        // Создаем ссылку для скачивания файла WAV
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+        downloadLink.download = 'audio.wav';
+        downloadLink.innerText = 'Download WAV';
+        document.body.appendChild(downloadLink);
+    }
+        const host = window.location.host
+        const socket = new WebSocket(`ws://${host}/ws`);
+
+        socket.onopen = function(e) {
+        socket.send(JSON.stringify({
+            message: 'Hello from Js client'
+        }));
+        };
+
+        socket.onmessage = function(event) {
+        try {
+            console.log(event);
+            console.log(event.data);
+            convertBlobToWav(event.data)
+            
+        } catch (e) {
+            console.log('Error:', e.message);
+        }
+        }
+    </script>
+
+<script>
+    // const socket1 = new WebSocket(`ws://${host}/ws/radio`);
+
+    // socket1.onopen = function(e) {
+    // socket1.send(JSON.stringify({
+    //     message: 'Hello from Js client'
+    // }));
+    // };
+    // console.log(socket1);
+    // socket1.onmessage = function(event) {
+    // try {
+    //     console.log(event);
+    //     console.log(event.data);
+        
+    // } catch (e) {
+    //     console.log('Error:', e.message);
+    // }
+    // }
+</script>
+
+<audio controls>
+    <source src="http://212.22.85.36/media/sample-15s.wav" type="audio/wav">
+    Your browser does not support the audio element.
+</audio>
+</body>
+</html>
